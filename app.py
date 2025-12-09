@@ -4,6 +4,7 @@
 
 from flask import Flask, render_template, g
 from models import get_db
+from controller import Controller
 
 app = Flask(__name__)
 
