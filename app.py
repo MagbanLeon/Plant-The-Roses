@@ -18,4 +18,8 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
+@app.route("/login")
+def login():
+    return 0
+
 app.run(debug=True)
