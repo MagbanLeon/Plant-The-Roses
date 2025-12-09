@@ -1,25 +1,26 @@
 <style>
 .mainRunner {
-  border: 0px solid #000;
+  /* border: 1px solid #000; */
   top: 50px;
   left: 30%;
+  height: 80%;
+  width: 26%;
   position: relative;
 }
 
 .img1 {
-  border: 1px solid #f00;
+  /* border: 1px solid #f00; */
   position: relative;
   z-index: 2;
-  top: 0;
+  top: 30%;
   left: 0;
 }
 
 .img2 {
-  border: 1px solid #0f0;
+  /* border: 1px solid #0f0; */
   position: absolute;
   z-index: 1;
   top: 0;
-  left: 0;
 }
 </style>
 
@@ -42,10 +43,9 @@
     <div class="mainRunner">
         {% if loaded == 1 %}
             <img src="../static/vase.png" alt="Vase 1" class="img1" width="500px">
-            <img src="../static/flower.jpg" alt="Flower" class="img2" width="500px">
+            <img src="{{flowerlink}}" alt="Flower" class="img2" height="500px" width="500px">
         {% else %}
             <img src="../static/vase.png" alt="Vase 1" class="img1" width="500px">
-            <img src="../static/flower.jpg" alt="Flower" class="img2" width="500px">
         {% endif %}
     </div>
 

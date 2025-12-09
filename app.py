@@ -18,7 +18,12 @@ app.config['save_path'] = save_path
 @app.route("/", methods = ['GET', 'POST'])
 def hello_world():
     if 'username' in session:
-        return render_template('landing.html', un = session['username'], loaded = 0)
+        value = plant()
+        if value is not None:
+            garden(value)
+            return render_template('landing.html', un = session['username'], loaded = 1, flowerlink = 'static/currentflower.png')
+        else:
+            return render_template('landing.html', un = session['username'], loaded = 0)
     else:
         return render_template('login.html')
 
@@ -37,7 +42,12 @@ def login():
         account = cursor.fetchone()
 
         if account:
-            return render_template('landing.html', un = username, loaded = 1)
+            value = plant()
+            if value is not None:
+                garden(value)
+                return render_template('landing.html', un = session['username'], loaded = 1, flowerlink = 'static/currentflower.png')
+            else:
+                return render_template('landing.html', un = session['username'], loaded = 0)
         else:
             return render_template('login.html')
 
@@ -93,7 +103,12 @@ def gumi():
             """, (image_data, session['username']))
             get_db().commit()
             remove(save_path)
-        return render_template('landing.html', un = session['username'], loaded = 1)
+        value = plant()
+        if value is not None:
+            garden(value)
+            return render_template('landing.html', un = session['username'], loaded = 1, flowerlink = 'static/currentflower.png')
+        else:
+            return render_template('landing.html', un = session['username'], loaded = 0)
     else:
         return render_template('landing.html', un = session['username'], loaded = 1)
     
@@ -115,9 +130,26 @@ def remove(folder):
             print('Failed to delete %s. Reason: %s' % (file_path, e))
 
 def plant():
+    print("planting")
     cur = get_db().cursor()
-    cur.execute("SELECT SavedImg FROM GEEK WHERE ?", (session['username']))
+    un = session['username']
+    cur.execute("SELECT SavedImg FROM GEEK WHERE Username = ?", (un,))
     data = cur.fetchone()[0]
     return data
 
-app.run(debug=True, port=8090)
+def garden(data):
+    print("gardening")
+    unroot() #gets rid of current image file
+    with open('static/currentflower.png', 'wb') as file:
+        file.write(data)
+
+def unroot():
+    print("unrooting")
+    file = 'currentflower.png'
+    location = '/workspaces/Plant-The-Roses/static'
+    path = os.path.join(location, file)
+
+    os.remove(path)
+    print(f"{file} has been removed successfully")
+
+app.run(debug=True, port=8080)
