@@ -83,7 +83,6 @@ def logout():
 
 @app.route('/gumi', methods = ['GET', 'POST'])
 def gumi():
-    un = session['username']
     #if request.method == 'POST' and 'flower' in request.form:
     file = request.files['flower']
     filename = secure_filename(file.filename)
@@ -97,7 +96,7 @@ def gumi():
             UPDATE GEEK
             SET SavedImg = ?
             WHERE Username = ?;
-            """, (image_data, un))
+            """, (image_data, session['username']))
             get_db().commit()
             remove(save_path)
         return render_template('landing.html', un = session['username'])
@@ -120,5 +119,10 @@ def remove(folder):
                 shutil.rmtree(file_path)
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+def plant():
+    cur = get_db().cursor()
+    cur.execute("SELECT SavedImg FROM GEEK WHERE ?", (session['username']))
+    data = cur.fetchone()[0]
 
 app.run(debug=True, port=8090)
