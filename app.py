@@ -18,7 +18,7 @@ app.config['save_path'] = save_path
 @app.route("/", methods = ['GET', 'POST'])
 def hello_world():
     if 'username' in session:
-        return render_template('landing.html', un = session['username'])
+        return render_template('landing.html', un = session['username'], loaded = 0)
     else:
         return render_template('login.html')
 
@@ -37,7 +37,7 @@ def login():
         account = cursor.fetchone()
 
         if account:
-            return render_template('landing.html', un = username)
+            return render_template('landing.html', un = username, loaded = 1)
         else:
             return render_template('login.html')
 
@@ -68,7 +68,7 @@ def register():
         cursor = dtabase.cursor()
         cursor.execute("INSERT INTO GEEK (Username, Password, SavedImg) VALUES (?, ?, NULL)", (username, password))
         dtabase.commit()
-    return render_template('landing.html', un = username)
+    return render_template('landing.html', un = username, loaded = 1)
 
 @app.route('/logout')
 def logout():
@@ -93,9 +93,9 @@ def gumi():
             """, (image_data, session['username']))
             get_db().commit()
             remove(save_path)
-        return render_template('landing.html', un = session['username'])
+        return render_template('landing.html', un = session['username'], loaded = 1)
     else:
-        return render_template('landing.html', un = session['username'])
+        return render_template('landing.html', un = session['username'], loaded = 1)
     
 @app.teardown_appcontext
 def close_connection(exception):

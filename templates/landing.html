@@ -1,8 +1,8 @@
 <head>
     <div>
-        <label for="avatar">Choose a profile picture:</label>
+        <label for="avatar">Place a flower:</label>
         <form method="POST" action="{{ url_for('gumi') }}" enctype="multipart/form-data">
-            <input type="file" id="flower" name="flower" accept="image/png, image/jpeg" />
+            <input type="file" id="flower" name="flower" accept="image/png, image/jpeg" required>
             <button type="submit"> Submit </button>
         </form>
 
@@ -10,6 +10,13 @@
     </div>
     <div>
         Logged in as {{un}}
+    </div>
+    <div>
+        {% if loaded == 1 %}
+            <img src="../static/vase.png" alt="Vase 1">
+        {% else %}
+            <img src="../static/flower.jpg" alt="Flower">
+        {% endif %}
     </div>
 
 
