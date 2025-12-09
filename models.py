@@ -21,7 +21,7 @@ def get_db():
             CREATE TABLE GEEK (
                 Username VARCHAR(50) NOT NULL,
                 Password VARCHAR(50) NOT NULL,
-                SavedImg BLOB(50) NOT NULL
+                SavedImg BLOB(50)
                 );
             """
             inCursor.execute(table_creation_query)

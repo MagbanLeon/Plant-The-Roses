@@ -37,12 +37,13 @@ def inbetween():
 @app.route("/register", methods = ['POST'])
 def register():
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+        print("hello?")
         username = request.form['username']
         password = request.form['password']
         print(username + " " + password)
         dtabase = get_db()
         cursor = dtabase.cursor()
-        cursor.execute("INSERT INTO GEEK (Username, Password) VALUES ('Mag', 'Mag')")
+        cursor.execute("INSERT INTO GEEK (Username, Password, SavedImg) VALUES (?, ?, NULL)", (username, password))
         dtabase.commit()
     return render_template('landing.html')
     
