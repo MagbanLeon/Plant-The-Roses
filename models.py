@@ -23,3 +23,7 @@ def get_db():
 
     #return DB
     return db
+
+class Model:
+    def attempt():
+     return 0
