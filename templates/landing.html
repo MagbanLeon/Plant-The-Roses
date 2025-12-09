@@ -1,3 +1,28 @@
+<style>
+.mainRunner {
+  border: 1px solid #000;
+  top: 50px;
+  left: 0;
+  position: relative;
+}
+
+.img1 {
+  border: 1px solid #f00;
+  position: relative;
+  z-index: 2;
+  top: 0;
+  left: 0;
+}
+
+.img2 {
+  border: 1px solid #0f0;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+}
+</style>
+
 <head>
     <div>
         <label for="avatar">Place a flower:</label>
@@ -11,11 +36,13 @@
     <div>
         Logged in as {{un}}
     </div>
-    <div>
+    <div class="mainRunner">
         {% if loaded == 1 %}
-            <img src="../static/vase.png" alt="Vase 1">
+            <img src="../static/vase.png" alt="Vase 1" class="img1" width="500px">
+            <img src="../static/flower.jpg" alt="Flower" class="img2" width="500px">
         {% else %}
-            <img src="../static/flower.jpg" alt="Flower">
+            <img src="../static/vase.png" alt="Vase 1" class="img1" width="500px">
+            <img src="../static/flower.jpg" alt="Flower" class="img2" width="500px">
         {% endif %}
     </div>
 
