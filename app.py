@@ -70,7 +70,7 @@ def register():
         dtabase.commit()
     return render_template('landing.html', un = username, loaded = 1)
 
-@app.route('/logout')
+@app.route('/logout', methods = ['POST'])
 def logout():
     # remove the username from the session if it's there
     session.pop('username', None)

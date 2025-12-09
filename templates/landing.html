@@ -1,8 +1,8 @@
 <style>
 .mainRunner {
-  border: 1px solid #000;
+  border: 0px solid #000;
   top: 50px;
-  left: 0;
+  left: 30%;
   position: relative;
 }
 
@@ -31,7 +31,10 @@
             <button type="submit"> Submit </button>
         </form>
 
-        <a href="/logout" style="text-decoration: none;">Logout</a>
+        <form method="POST" action="{{ url_for('logout') }}">
+            <!-- logout -->
+            <button type="submit"> Logout </button>
+        </form>
     </div>
     <div>
         Logged in as {{un}}
