@@ -30,7 +30,15 @@ def get_db():
     #return DB
     return db
 
+
+def addAccount(newUser, newPass):
+        c.execute("INSERT INTO GEEK (Username, Password) VALUES (%s, %s)", (newUser, newPass))
+        return 0
+
 class Model:
+    def __init__(self):
+        pass
+
     def attempt():
         return 0
     def getAccount():

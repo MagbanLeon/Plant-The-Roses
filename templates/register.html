@@ -2,4 +2,16 @@
     <div>
         Register Page
     </div>
+    <div>
+        <form method="POST" action="{{ url_for('register') }}">
+        <!-- Username -->
+        <label for="first">Username:</label>
+        <input type="text" id="first" name="first" placeholder="Enter your Username" required>
+        <!-- Password -->
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter your Password" required>
+        <!-- Submit -->
+        <button type="submit"> Submit </button>
+    </form>
+    </div>
 </head>
