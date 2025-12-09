@@ -6,7 +6,7 @@ from flask import Flask, render_template, g, request, session, redirect, url_for
 from models import get_db
 from controller import Controller
 from models import Model
-import os
+import os, shutil
 from os import listdir
 from werkzeug.utils import secure_filename
 
@@ -99,6 +99,7 @@ def gumi():
             WHERE Username = ?;
             """, (image_data, un))
             get_db().commit()
+            remove(save_path)
         return render_template('landing.html', un = session['username'])
     else:
         return render_template('landing.html', un = session['username'])
@@ -108,5 +109,16 @@ def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
+
+def remove(folder):
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
 
 app.run(debug=True, port=8090)
