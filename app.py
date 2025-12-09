@@ -31,18 +31,15 @@ def login():
         username = request.form['username']
         session['username'] = username
         password = request.form['password']
-        print(username + " " + password)
+
         cursor = get_db().cursor()
         cursor.execute('SELECT * FROM GEEK WHERE Username = ? AND Password = ?', (username, password))
         account = cursor.fetchone()
-        print(account)
+
         if account:
-            print("um")
             return render_template('landing.html', un = username)
         else:
-            msg = 'Incorrect username/password!'
-            print("uokm")
-    return render_template('login.html')
+            return render_template('login.html')
 
 @app.route("/inbetween", methods = ['GET', 'POST'])
 def inbetween():
@@ -64,11 +61,9 @@ def register():
     #     session['username'] = request.form['username']
     #     return redirect(url_for('hello_world'))
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
-        print("hello?")
         username = request.form['username']
         session['username'] = username
         password = request.form['password']
-        print(username + " " + password)
         dtabase = get_db()
         cursor = dtabase.cursor()
         cursor.execute("INSERT INTO GEEK (Username, Password, SavedImg) VALUES (?, ?, NULL)", (username, password))
@@ -90,7 +85,6 @@ def gumi():
     
     if True:
         with open('local/'+ os.listdir(save_path)[0], 'rb') as file:
-            print("working?")
             image_data = file.read()
             get_db().cursor().execute("""
             UPDATE GEEK
@@ -124,5 +118,6 @@ def plant():
     cur = get_db().cursor()
     cur.execute("SELECT SavedImg FROM GEEK WHERE ?", (session['username']))
     data = cur.fetchone()[0]
+    return data
 
 app.run(debug=True, port=8090)
