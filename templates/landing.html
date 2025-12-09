@@ -1,13 +1,16 @@
 <head>
     <div>
         <label for="avatar">Choose a profile picture:</label>
+        <form method="POST" action="{{ url_for('gumi') }}" enctype="multipart/form-data">
+            <input type="file" id="flower" name="flower" accept="image/png, image/jpeg" />
+            <button type="submit"> Submit </button>
+        </form>
 
-        <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" />
         <a href="/logout" style="text-decoration: none;">Logout</a>
     </div>
     <div>
         Logged in as {{un}}
     </div>
 
-    
+
 </head>

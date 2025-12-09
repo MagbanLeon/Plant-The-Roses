@@ -6,9 +6,14 @@ from flask import Flask, render_template, g, request, session, redirect, url_for
 from models import get_db
 from controller import Controller
 from models import Model
+import os
+from os import listdir
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+save_path = '/workspaces/Plant-The-Roses/local'
+app.config['save_path'] = save_path
 
 @app.route("/", methods = ['GET', 'POST'])
 def hello_world():
@@ -19,20 +24,21 @@ def hello_world():
 
 @app.route("/login", methods = ['POST'])
 def login():
-    if request.method == 'POST':
-        session['username'] = request.form['username']
-        return redirect(url_for('hello_world'))
+    # if request.method == 'POST':
+    #     session['username'] = request.form['username']
+    #     return redirect(url_for('hello_world'))
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
-        un = username
+        session['username'] = username
         password = request.form['password']
         print(username + " " + password)
         cursor = get_db().cursor()
         cursor.execute('SELECT * FROM GEEK WHERE Username = ? AND Password = ?', (username, password))
         account = cursor.fetchone()
+        print(account)
         if account:
             print("um")
-            return render_template('landing.html', un = un)
+            return render_template('landing.html', un = username)
         else:
             msg = 'Incorrect username/password!'
             print("uokm")
@@ -54,20 +60,20 @@ def inbetween2():
 
 @app.route("/register", methods = ['POST'])
 def register():
-    if request.method == 'POST':
-        session['username'] = request.form['username']
-        return redirect(url_for('hello_world'))
+    # if request.method == 'POST':
+    #     session['username'] = request.form['username']
+    #     return redirect(url_for('hello_world'))
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         print("hello?")
         username = request.form['username']
-        un = username
+        session['username'] = username
         password = request.form['password']
         print(username + " " + password)
         dtabase = get_db()
         cursor = dtabase.cursor()
         cursor.execute("INSERT INTO GEEK (Username, Password, SavedImg) VALUES (?, ?, NULL)", (username, password))
         dtabase.commit()
-    return render_template('landing.html', un = un)
+    return render_template('landing.html', un = username)
 
 @app.route('/logout')
 def logout():
@@ -75,9 +81,27 @@ def logout():
     session.pop('username', None)
     return render_template('login.html')
 
-@app.route('/gumi')
+@app.route('/gumi', methods = ['GET', 'POST'])
 def gumi():
-    return 0
+    un = session['username']
+    #if request.method == 'POST' and 'flower' in request.form:
+    file = request.files['flower']
+    filename = secure_filename(file.filename)
+    file.save(os.path.join(app.config['save_path'], filename))
+    
+    if True:
+        with open('local/'+ os.listdir(save_path)[0], 'rb') as file:
+            print("working?")
+            image_data = file.read()
+            get_db().cursor().execute("""
+            UPDATE GEEK
+            SET SavedImg = ?
+            WHERE Username = ?;
+            """, (image_data, un))
+            get_db().commit()
+        return render_template('landing.html', un = session['username'])
+    else:
+        return render_template('landing.html', un = session['username'])
     
 @app.teardown_appcontext
 def close_connection(exception):
@@ -85,4 +109,4 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
-app.run(debug=True, port=8080)
+app.run(debug=True, port=8090)
